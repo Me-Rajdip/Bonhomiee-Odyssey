@@ -1,0 +1,589 @@
+@import 'https://fonts.googleapis.com/css?family=Montserrat:300, 400, 700&display=swap';
+@import url("https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Cormorant+Garamond&display=swap");
+@import url("https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css");
+
+/* Base Styles */
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+html {
+    font-size: 12px;
+    font-family: Verdana, sans-serif;
+    scroll-behavior: smooth;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    color: #333;
+    background: #f3efef;
+    font-family: "Cormorant Garamond", serif;
+    line-height: 1.6;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+.container {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 15px;
+}
+
+img {
+    max-width: 100%;
+    height: auto;
+}
+
+p {
+    color: #555;
+    font-size: 1.4rem;
+    margin-top: 5px;
+    line-height: 2.5rem;
+    font-weight: 300;
+    letter-spacing: 0.05rem;
+}
+
+.section-title {
+    font-size: 4rem;
+    font-weight: 300;
+    color: #1a1a1a;
+    margin-bottom: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.2rem;
+    text-align: center;
+    font-family: Verdana, sans-serif;
+}
+
+.section-title span {
+    color: #2de549;
+}
+
+/* Header Section */
+#header {
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100vw;
+    height: auto;
+}
+
+#header .header {
+    min-height: 8vh;
+    background-color: rgba(31, 30, 30, 0.24);
+    transition: 0.3s ease background-color;
+}
+
+#header .nav-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    height: 100%;
+    max-width: 1300px;
+    padding: 0 10px;
+    margin: 0 auto;
+}
+
+#header .brand h1 {
+    font-size: 2.5rem;
+    text-transform: uppercase;
+    color: white;
+    margin: 0;
+}
+
+#header .brand h1 span {
+    color: #069e0b;
+}
+
+#header .nav-list ul {
+    list-style: none;
+    position: absolute;
+    background-color: rgb(31, 30, 30);
+    width: 100vw;
+    height: 100vh;
+    left: 100%;
+    top: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 1;
+    overflow-x: hidden;
+    transition: 0.5s ease left;
+    margin: 0;
+    padding: 0;
+}
+
+#header .nav-list ul.active {
+    left: 0%;
+}
+
+#header .nav-list ul a {
+    font-size: 2.5rem;
+    font-weight: 500;
+    letter-spacing: 0.2rem;
+    text-decoration: none;
+    color: white;
+    text-transform: uppercase;
+    padding: 20px;
+    display: block;
+    transition: color 0.3s ease;
+}
+
+#header .nav-list ul a:hover {
+    color: #3df21d;
+}
+
+#header .homebar {
+    height: 60px;
+    width: 60px;
+    display: inline-block;
+    border: 3px solid white;
+    border-radius: 50%;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 100;
+    cursor: pointer;
+    transform: scale(0.8);
+    margin-right: 20px;
+}
+
+#header .homebar:after {
+    position: absolute;
+    content: '';
+    height: 100%;
+    width: 100%;
+    border-radius: 50%;
+    border: 3px solid white;
+    animation: homebar_puls 1s ease infinite;
+}
+
+#header .homebar .bar {
+    height: 2px;
+    width: 30px;
+    position: relative;
+    background-color: white;
+    z-index: -1;
+}
+
+#header .homebar .bar::after,
+#header .homebar .bar::before {
+    content: '';
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    left: 0;
+    background-color: white;
+    transition: 0.3s ease;
+    transition-property: top, bottom;
+}
+
+#header .homebar .bar::after {
+    top: 8px;
+}
+
+#header .homebar .bar::before {
+    bottom: 8px;
+}
+
+#header .homebar.active .bar::before {
+    bottom: 0;
+}
+
+#header .homebar.active .bar::after {
+    top: 0;
+}
+
+/* Hero Section */
+.hero-section {
+    background-image: url('{% static 'Img/Img2.png' %};
+    background-size: cover;
+    background-position: center;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    position: relative;
+    color: white;
+    text-align: center;
+    padding-top: 80px;
+}
+
+.hero-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.6);
+    z-index: 0;
+}
+
+.hero-content {
+    position: relative;
+    z-index: 1;
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+.hero-content h1 {
+    font-size: 4rem;
+    margin-bottom: 20px;
+    font-weight: 700;
+}
+
+.hero-content h1 span {
+    color: #2de549;
+}
+
+.hero-content .lead {
+    font-size: 1.8rem;
+    margin-bottom: 30px;
+}
+
+.hero-buttons {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.btn {
+    display: inline-block;
+    padding: 12px 30px;
+    border-radius: 50px;
+    font-size: 1.6rem;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.btn-primary {
+    background-color: #2de549;
+    color: white;
+    border: 2px solid #2de549;
+}
+
+.btn-primary:hover {
+    background-color: transparent;
+    color: #2de549;
+}
+
+.btn-outline-primary {
+    background-color: transparent;
+    color: white;
+    border: 2px solid white;
+}
+
+.btn-outline-primary:hover {
+    background-color: white;
+    color: #333;
+}
+
+/* About Section */
+.about-section {
+    padding: 100px 0;
+    background-color: white;
+}
+
+.about-section img {
+    border-radius: 10px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+}
+
+.about-section h2 {
+    font-size: 3.5rem;
+    margin-bottom: 20px;
+}
+
+.about-section .text-muted {
+    color: #777;
+    font-size: 1.4rem;
+    margin-bottom: 20px;
+}
+
+.about-section p {
+    margin-bottom: 20px;
+    font-size: 1.6rem;
+    color: #555;
+}
+
+/* Features Section */
+.features-section {
+    padding: 100px 0;
+    background-color: #f9f9f9;
+}
+
+.feature-card {
+    background: white;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+    height: 100%;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.feature-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+}
+
+.feature-icon {
+    font-size: 3rem;
+    color: #2de549;
+    margin-bottom: 20px;
+}
+
+.feature-card h3 {
+    font-size: 2rem;
+    margin-bottom: 15px;
+    color: #333;
+}
+
+.feature-card p {
+    font-size: 1.4rem;
+    color: #666;
+}
+
+/* Process Section */
+.process-section {
+    padding: 100px 0;
+    background-color: white;
+}
+
+.process-steps {
+    max-width: 800px;
+    margin: 0 auto;
+    position: relative;
+}
+
+.process-step {
+    display: flex;
+    margin-bottom: 40px;
+    align-items: flex-start;
+}
+
+.step-number {
+    background-color: #2de549;
+    color: white;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2rem;
+    font-weight: bold;
+    margin-right: 20px;
+    flex-shrink: 0;
+}
+
+.step-content h3 {
+    font-size: 2.2rem;
+    color: #333;
+    margin-bottom: 10px;
+}
+
+.step-content p {
+    font-size: 1.5rem;
+    color: #666;
+}
+
+/* Contact Section */
+.contact-section {
+    padding: 100px 0;
+    background-color: #f9f9f9;
+}
+
+.contact-card {
+    background: white;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+    height: 100%;
+    text-align: center;
+}
+
+.contact-icon {
+    font-size: 3rem;
+    color: #2de549;
+    margin-bottom: 20px;
+}
+
+.contact-card h3 {
+    font-size: 2rem;
+    margin-bottom: 15px;
+    color: #333;
+}
+
+.contact-card p {
+    font-size: 1.4rem;
+    color: #666;
+    margin-bottom: 5px;
+}
+
+/* Footer */
+.footer {
+    background: #111;
+    color: white;
+    padding: 50px 0 0;
+}
+
+.footer h3 {
+    color: #2de549;
+    font-size: 2rem;
+    margin-bottom: 20px;
+}
+
+.footer-links {
+    list-style: none;
+    padding: 0;
+}
+
+.footer-links li {
+    margin-bottom: 10px;
+}
+
+.footer-links a {
+    color: #ccc;
+    transition: color 0.3s ease;
+}
+
+.footer-links a:hover {
+    color: #2de549;
+}
+
+.footer-contact {
+    list-style: none;
+    padding: 0;
+}
+
+.footer-contact li {
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+}
+
+.footer-contact i {
+    margin-right: 10px;
+    color: #2de549;
+    font-size: 1.6rem;
+    width: 20px;
+}
+
+.social-links {
+    display: flex;
+    gap: 15px;
+    margin-top: 20px;
+}
+
+.social-links a {
+    color: white;
+    background: #333;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+}
+
+.social-links a:hover {
+    background: #2de549;
+    transform: translateY(-3px);
+}
+
+.footer hr {
+    border-color: rgba(255, 255, 255, 0.1);
+}
+
+.footer .text-center {
+    padding: 20px 0;
+}
+
+/* Keyframes */
+@keyframes homebar_puls {
+    0% {
+        opacity: 1;
+        transform: scale(1);
+    }
+    100% {
+        opacity: 0;
+        transform: scale(1.4);
+    }
+}
+
+/* Responsive Styles */
+@media (max-width: 992px) {
+    .hero-content h1 {
+        font-size: 3.5rem;
+    }
+    
+    .section-title {
+        font-size: 3.5rem;
+    }
+}
+
+@media (max-width: 768px) {
+    html {
+        font-size: 10px;
+    }
+    
+    .hero-content h1 {
+        font-size: 3rem;
+    }
+    
+    .section-title {
+        font-size: 3rem;
+    }
+    
+    .process-step {
+        flex-direction: column;
+    }
+    
+    .step-number {
+        margin-bottom: 15px;
+        margin-right: 0;
+    }
+    
+    .hero-buttons {
+        flex-direction: column;
+        gap: 15px;
+    }
+    
+    .btn {
+        width: 100%;
+    }
+}
+
+@media (max-width: 576px) {
+    .hero-content h1 {
+        font-size: 2.5rem;
+    }
+    
+    .hero-content .lead {
+        font-size: 1.5rem;
+    }
+    
+    .section-title {
+        font-size: 2.5rem;
+    }
+    
+    #header .brand h1 {
+        font-size: 2rem;
+    }
+}

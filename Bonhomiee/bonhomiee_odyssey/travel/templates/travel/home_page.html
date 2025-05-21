@@ -1,0 +1,868 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bonhomiee Odyssey's - Corporate Travel Management</title>
+  <link rel="shortcut icon" type="image/x-icon" href="{% static 'Img/LOGO.png' %}">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    /* CSS Styles */
+    :root {
+      --primary-color: #2a5ee8;
+      --secondary-color: #1a3a8f;
+      --accent-color: #4bc0d9;
+      --light-color: #f8f9fa;
+      --dark-color: #212529;
+      --success-color: #28a745;
+    }
+    
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: 'Poppins', sans-serif;
+      line-height: 1.6;
+      color: #333;
+      background-color: #fff;
+    }
+    
+    .container, .cntr {
+      width: 100%;
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+    
+    /* Header Styles */
+    #header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      z-index: 1000;
+      transition: all 0.3s ease;
+      background-color: rgba(42, 94, 232, 0.9);
+    }
+    
+    #header.scrolled {
+      background-color: var(--primary-color);
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    }
+    
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 15px 0;
+    }
+    
+    .brand {
+      display: flex;
+      align-items: center;
+    }
+    
+    .brand h1 {
+      font-size: 2rem;
+      color: white;
+      font-weight: 700;
+    }
+    
+    .brand h1 span {
+      color: var(--accent-color);
+    }
+    
+    .nav-list ul {
+      display: flex;
+      list-style: none;
+    }
+    
+    .nav-list ul li {
+      margin-left: 30px;
+    }
+    
+    .nav-list ul li a {
+      color: white;
+      text-decoration: none;
+      font-size: 1rem;
+      font-weight: 500;
+      transition: color 0.3s ease;
+      text-transform: uppercase;
+    }
+    
+    .nav-list ul li a:hover {
+      color: var(--accent-color);
+    }
+    
+    .homebar {
+      display: none;
+      cursor: pointer;
+      width: 30px;
+      height: 20px;
+      position: relative;
+    }
+    
+    .homebar .bar {
+      position: absolute;
+      left: 0;
+      width: 100%;
+      height: 2px;
+      background-color: white;
+      transition: all 0.3s ease;
+    }
+    
+    .homebar .bar:nth-child(1) {
+      top: 0;
+    }
+    
+    .homebar .bar:nth-child(2) {
+      top: 50%;
+      transform: translateY(-50%);
+    }
+    
+    .homebar .bar:nth-child(3) {
+      bottom: 0;
+    }
+    
+    .homebar.active .bar:nth-child(1) {
+      top: 50%;
+      transform: translateY(-50%) rotate(45deg);
+    }
+    
+    .homebar.active .bar:nth-child(2) {
+      opacity: 0;
+    }
+    
+    .homebar.active .bar:nth-child(3) {
+      bottom: 50%;
+      transform: translateY(50%) rotate(-45deg);
+    }
+    
+    /* Hero Section */
+    #hero {
+      height: 100vh;
+      background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), 
+                  url('https://images.unsplash.com/photo-1506929562872-bb421503ef21?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1368&q=80') no-repeat center center/cover;
+      display: flex;
+      align-items: center;
+      color: white;
+      text-align: center;
+      padding-top: 80px;
+    }
+    
+    .hero-content {
+      max-width: 800px;
+      margin: 0 auto;
+    }
+    
+    .hero-content h1 {
+      font-size: 3.5rem;
+      margin-bottom: 20px;
+      font-weight: 700;
+    }
+    
+    .hero-content p {
+      font-size: 1.2rem;
+      margin-bottom: 30px;
+    }
+    
+    .btn {
+      display: inline-block;
+      padding: 12px 30px;
+      background-color: var(--accent-color);
+      color: white;
+      border: none;
+      border-radius: 50px;
+      font-size: 1rem;
+      font-weight: 500;
+      text-decoration: none;
+      transition: all 0.3s ease;
+      margin: 10px;
+    }
+    
+    .btn:hover {
+      background-color: var(--primary-color);
+      transform: translateY(-3px);
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    }
+    
+    .btn-outline {
+      background-color: transparent;
+      border: 2px solid white;
+    }
+    
+    .btn-outline:hover {
+      background-color: white;
+      color: var(--primary-color);
+    }
+    
+    /* Features Section */
+    #features {
+      padding: 100px 0;
+      background-color: var(--light-color);
+    }
+    
+    .section-title {
+      text-align: center;
+      margin-bottom: 60px;
+    }
+    
+    .section-title h2 {
+      font-size: 2.5rem;
+      color: var(--dark-color);
+      margin-bottom: 15px;
+    }
+    
+    .section-title p {
+      color: #666;
+      max-width: 700px;
+      margin: 0 auto;
+    }
+    
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 30px;
+    }
+    
+    .feature-card {
+      background-color: white;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+      text-align: center;
+      transition: transform 0.3s ease;
+    }
+    
+    .feature-card:hover {
+      transform: translateY(-10px);
+    }
+    
+    .feature-icon {
+      font-size: 3rem;
+      color: var(--primary-color);
+      margin-bottom: 20px;
+    }
+    
+    .feature-card h3 {
+      font-size: 1.5rem;
+      margin-bottom: 15px;
+    }
+    
+    /* Process Section */
+    #process {
+      padding: 100px 0;
+      background-color: white;
+    }
+    
+    .process-steps {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 30px;
+      margin-top: 50px;
+    }
+    
+    .process-step {
+      flex: 1;
+      min-width: 250px;
+      max-width: 300px;
+      text-align: center;
+      position: relative;
+    }
+    
+    .step-number {
+      width: 60px;
+      height: 60px;
+      background-color: var(--primary-color);
+      color: white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin: 0 auto 20px;
+    }
+    
+    .process-step h3 {
+      font-size: 1.3rem;
+      margin-bottom: 15px;
+    }
+    
+    /* Testimonials */
+    #testimonials {
+      padding: 100px 0;
+      background-color: var(--light-color);
+    }
+    
+    .testimonials-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 30px;
+    }
+    
+    .testimonial-card {
+      background-color: white;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+    }
+    
+    .testimonial-text {
+      font-style: italic;
+      margin-bottom: 20px;
+    }
+    
+    .testimonial-author {
+      display: flex;
+      align-items: center;
+    }
+    
+    .author-img {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      overflow: hidden;
+      margin-right: 15px;
+    }
+    
+    .author-img img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    
+    .author-info h4 {
+      font-size: 1.1rem;
+      margin-bottom: 5px;
+    }
+    
+    .author-info p {
+      color: #666;
+      font-size: 0.9rem;
+    }
+    
+    /* Contact Section */
+    #contact {
+      padding: 100px 0;
+      background-color: white;
+    }
+    
+    .contact-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 50px;
+    }
+    
+    .contact-info h3 {
+      font-size: 1.8rem;
+      margin-bottom: 20px;
+    }
+    
+    .contact-details {
+      margin-bottom: 30px;
+    }
+    
+    .contact-item {
+      display: flex;
+      align-items: flex-start;
+      margin-bottom: 20px;
+    }
+    
+    .contact-icon {
+      font-size: 1.5rem;
+      color: var(--primary-color);
+      margin-right: 15px;
+      margin-top: 5px;
+    }
+    
+    .contact-form input,
+    .contact-form textarea {
+      width: 100%;
+      padding: 12px 15px;
+      margin-bottom: 20px;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      font-family: 'Poppins', sans-serif;
+    }
+    
+    .contact-form textarea {
+      height: 150px;
+    }
+    
+    /* Footer */
+    #footer {
+      background-color: var(--dark-color);
+      color: white;
+      padding: 50px 0 20px;
+    }
+    
+    .footer-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 30px;
+      margin-bottom: 40px;
+    }
+    
+    .footer-col h3 {
+      font-size: 1.3rem;
+      margin-bottom: 20px;
+      color: var(--accent-color);
+    }
+    
+    .footer-links {
+      list-style: none;
+    }
+    
+    .footer-links li {
+      margin-bottom: 10px;
+    }
+    
+    .footer-links a {
+      color: #ccc;
+      text-decoration: none;
+      transition: color 0.3s ease;
+    }
+    
+    .footer-links a:hover {
+      color: white;
+    }
+    
+    .social-links {
+      display: flex;
+      gap: 15px;
+    }
+    
+    .social-links a {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 40px;
+      height: 40px;
+      background-color: rgba(255, 255, 255, 0.1);
+      border-radius: 50%;
+      color: white;
+      transition: all 0.3s ease;
+    }
+    
+    .social-links a:hover {
+      background-color: var(--accent-color);
+      transform: translateY(-3px);
+    }
+    
+    .copyright {
+      text-align: center;
+      padding-top: 20px;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      color: #aaa;
+      font-size: 0.9rem;
+    }
+    
+    /* Marquee Styles */
+    marquee {
+      display: inline-block;
+    }
+    
+    /* Responsive Styles */
+    @media (max-width: 992px) {
+      .homebar {
+        display: block;
+      }
+      
+      .nav-list ul {
+        position: fixed;
+        top: 80px;
+        left: -100%;
+        width: 100%;
+        height: calc(100vh - 80px);
+        background-color: var(--primary-color);
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.5s ease;
+        opacity: 0;
+        visibility: hidden;
+      }
+      
+      .nav-list ul.active {
+        left: 0;
+        opacity: 1;
+        visibility: visible;
+      }
+      
+      .nav-list ul li {
+        margin: 15px 0;
+      }
+      
+      .hero-content h1 {
+        font-size: 2.5rem;
+      }
+    }
+    
+    @media (max-width: 768px) {
+      .btn {
+        display: block;
+        width: 80%;
+        margin: 10px auto;
+      }
+      
+      .section-title h2 {
+        font-size: 2rem;
+      }
+      
+      marquee {
+        display: block;
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Header Section -->
+  <section id="header">
+    <div class="header cntr">
+      <div class="nav-bar">
+        <div class="brand">
+          <a href="{% url 'travel:home' %}">
+            <marquee behavior="scroll" direction="left" scrollamount="4">
+              <h1><span> Bonhomiee  </span> Odyssey's</h1>
+            </marquee>
+          </a>
+        </div>
+        <div class="nav-list">
+          <div class="homebar">
+            <div class="bar"></div>
+            <div class="bar"></div>
+            <div class="bar"></div>
+          </div>
+          <ul>
+            {% if user.is_authenticated %}
+              <li><a href="{% url 'travel:travel_request_list' %}" data-after="My Requests"><i class="fas fa-suitcase me-1"></i> My Requests</a></li>
+              <li><a href="{% url 'travel:travel_request_create' %}" data-after="New Request"><i class="fas fa-plus-circle me-1"></i> New Request</a></li>
+              <li>
+                <form action="{% url 'travel:logout' %}" method="post" class="d-inline">
+                  {% csrf_token %}
+                  <a href="#" onclick="this.parentNode.submit(); return false;" data-after="Logout"><i class="fas fa-sign-out-alt me-1"></i> Logout</a>
+                </form>
+              </li>
+            {% else %}
+              <li><a href="{% url 'travel:login' %}" data-after="Login"><i class="fas fa-sign-in-alt me-1"></i> Login</a></li>
+            {% endif %}
+            <li><a href="#AboutUs" data-after="AboutUs"><i class="fas fa-info-circle me-1"></i> About Us</a></li>
+            <li><a href="#contact" data-after="Contact"><i class="fas fa-envelope me-1"></i> Contact</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+  
+  <!-- Hero Section -->
+  <section id="hero">
+    <div class="container">
+      <div class="hero-content">
+        <h1>Corporate Travel Management Made Simple</h1>
+        <p>Streamline your business travel with our all-in-one platform for booking, approvals, and expense management</p>
+        <div>
+          <a href="#" class="btn">Request a Demo</a>
+          <a href="#" class="btn btn-outline">Learn More</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features Section -->
+  <section id="features">
+    <div class="container">
+      <div class="section-title">
+        <h2>Why Choose Our Platform</h2>
+        <p>Our comprehensive travel management solution helps companies of all sizes save time and reduce costs</p>
+      </div>
+      <div class="features-grid">
+        <div class="feature-card">
+          <div class="feature-icon">
+            <i class="fas fa-plane"></i>
+          </div>
+          <h3>Seamless Bookings</h3>
+          <p>Book flights, hotels, and transportation all in one place with our intuitive platform.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">
+            <i class="fas fa-check-circle"></i>
+          </div>
+          <h3>Automated Approvals</h3>
+          <p>Streamlined approval workflows that save time and reduce administrative overhead.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">
+            <i class="fas fa-chart-line"></i>
+          </div>
+          <h3>Real-time Analytics</h3>
+          <p>Powerful reporting tools to track spending and identify cost-saving opportunities.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">
+            <i class="fas fa-mobile-alt"></i>
+          </div>
+          <h3>Mobile Access</h3>
+          <p>Manage your travel anytime, anywhere with our fully responsive mobile platform.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Process Section -->
+  <section id="process">
+    <div class="container">
+      <div class="section-title">
+        <h2>How It Works</h2>
+        <p>Our simple 4-step process makes corporate travel management effortless</p>
+      </div>
+      <div class="process-steps">
+        <div class="process-step">
+          <div class="step-number">1</div>
+          <h3>Submit Request</h3>
+          <p>Employees submit travel requests with all necessary details through our platform.</p>
+        </div>
+        <div class="process-step">
+          <div class="step-number">2</div>
+          <h3>Manager Approval</h3>
+          <p>Requests are automatically routed to the appropriate manager for approval.</p>
+        </div>
+        <div class="process-step">
+          <div class="step-number">3</div>
+          <h3>Travel Booking</h3>
+          <p>Once approved, our system books flights, hotels, and transportation.</p>
+        </div>
+        <div class="process-step">
+          <div class="step-number">4</div>
+          <h3>Expense Reporting</h3>
+          <p>Employees submit expenses which are automatically matched to trips.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Testimonials Section -->
+  <section id="testimonials">
+    <div class="container">
+      <div class="section-title">
+        <h2>What Our Clients Say</h2>
+        <p>Hear from companies that have transformed their travel management with our platform</p>
+      </div>
+      <div class="testimonials-grid">
+        <div class="testimonial-card">
+          <div class="testimonial-text">
+            <p>"Bonhomiee Odyssey's has reduced our travel administration time by 60%. The approval workflow alone has saved us hundreds of hours each quarter."</p>
+          </div>
+          <div class="testimonial-author">
+            <div class="author-img">
+              <img src="https://randomuser.me/api/portraits/women/45.jpg" alt="Sarah Johnson">
+            </div>
+            <div class="author-info">
+              <h4>Sarah Johnson</h4>
+              <p>Travel Manager, TechCorp</p>
+            </div>
+          </div>
+        </div>
+        <div class="testimonial-card">
+          <div class="testimonial-text">
+            <p>"The reporting features have given us visibility into our travel spending we never had before. We've identified over $200k in annual savings."</p>
+          </div>
+          <div class="testimonial-author">
+            <div class="author-img">
+              <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Michael Chen">
+            </div>
+            <div class="author-info">
+              <h4>Michael Chen</h4>
+              <p>CFO, Global Solutions</p>
+            </div>
+          </div>
+        </div>
+        <div class="testimonial-card">
+          <div class="testimonial-text">
+            <p>"Our employees love the mobile app - it makes booking and managing trips so much easier than our old system. Adoption was nearly 100% from day one."</p>
+          </div>
+          <div class="testimonial-author">
+            <div class="author-img">
+              <img src="https://randomuser.me/api/portraits/women/68.jpg" alt="Priya Patel">
+            </div>
+            <div class="author-info">
+              <h4>Priya Patel</h4>
+              <p>HR Director, InnovateCo</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact Section -->
+  <section id="contact">
+    <div class="container">
+      <div class="section-title">
+        <h2>Get In Touch</h2>
+        <p>Ready to simplify your corporate travel management? Contact us today.</p>
+      </div>
+      <div class="contact-grid">
+        <div class="contact-info">
+          <h3>Contact Information</h3>
+          <div class="contact-details">
+            <div class="contact-item">
+              <div class="contact-icon">
+                <i class="fas fa-map-marker-alt"></i>
+              </div>
+              <div>
+                <p>Uniworld City, Newtown Action Area III</p>
+                <p>Kolkata, West Bengal, India</p>
+              </div>
+            </div>
+            <div class="contact-item">
+              <div class="contact-icon">
+                <i class="fas fa-phone"></i>
+              </div>
+              <div>
+                <p>+91 89587 81072</p>
+                <p>+91 62760 52495</p>
+              </div>
+            </div>
+            <div class="contact-item">
+              <div class="contact-icon">
+                <i class="fas fa-envelope"></i>
+              </div>
+              <div>
+                <p>travel-support@bonhomiee.com</p>
+                <p>helpdesk@bonhomiee.com</p>
+              </div>
+            </div>
+          </div>
+          <div class="social-links">
+            <a href="#"><i class="fab fa-facebook-f"></i></a>
+            <a href="#"><i class="fab fa-twitter"></i></a>
+            <a href="#"><i class="fab fa-linkedin-in"></i></a>
+            <a href="#"><i class="fab fa-instagram"></i></a>
+          </div>
+        </div>
+        <div class="contact-form">
+          <form>
+            <input type="text" placeholder="Your Name" required>
+            <input type="email" placeholder="Your Email" required>
+            <input type="text" placeholder="Company Name">
+            <input type="tel" placeholder="Phone Number">
+            <textarea placeholder="Your Message"></textarea>
+            <button type="submit" class="btn">Send Message</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer id="footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-col">
+          <h3>Bonhomiee Odyssey's</h3>
+          <p>Revolutionizing corporate travel management with innovative technology and exceptional service.</p>
+          <div class="social-links">
+            <a href="#"><i class="fab fa-facebook-f"></i></a>
+            <a href="#"><i class="fab fa-twitter"></i></a>
+            <a href="#"><i class="fab fa-linkedin-in"></i></a>
+            <a href="#"><i class="fab fa-instagram"></i></a>
+          </div>
+        </div>
+        <div class="footer-col">
+          <h3>Quick Links</h3>
+          <ul class="footer-links">
+            <li><a href="#hero">Home</a></li>
+            <li><a href="#features">Features</a></li>
+            <li><a href="#process">How It Works</a></li>
+            <li><a href="#testimonials">Testimonials</a></li>
+            <li><a href="#contact">Contact</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h3>Services</h3>
+          <ul class="footer-links">
+            <li><a href="#">Travel Booking</a></li>
+            <li><a href="#">Approval Workflows</a></li>
+            <li><a href="#">Expense Management</a></li>
+            <li><a href="#">Travel Policy</a></li>
+            <li><a href="#">Reporting & Analytics</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h3>Support</h3>
+          <ul class="footer-links">
+            <li><a href="#">Help Center</a></li>
+            <li><a href="#">FAQs</a></li>
+            <li><a href="#">Privacy Policy</a></li>
+            <li><a href="#">Terms of Service</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="copyright">
+        <p>&copy; 2025 Bonhomiee Odyssey's. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // JavaScript for responsive navigation and scroll effects
+    document.addEventListener('DOMContentLoaded', function() {
+      const homebar = document.querySelector('.homebar');
+      const mobileMenu = document.querySelector('.nav-list ul');
+      const header = document.getElementById('header');
+      
+      // Mobile menu toggle
+      homebar.addEventListener('click', function() {
+        this.classList.toggle('active');
+        mobileMenu.classList.toggle('active');
+      });
+      
+      // Close mobile menu when clicking a link
+      const navLinks = document.querySelectorAll('.nav-list ul li a');
+      navLinks.forEach(link => {
+        link.addEventListener('click', function() {
+          homebar.classList.remove('active');
+          mobileMenu.classList.remove('active');
+        });
+      });
+      
+      // Header scroll effect
+      window.addEventListener('scroll', function() {
+        if (window.scrollY > 100) {
+          header.classList.add('scrolled');
+        } else {
+          header.classList.remove('scrolled');
+        }
+      });
+      
+      // Smooth scrolling for anchor links
+      document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function(e) {
+          e.preventDefault();
+          
+          const targetId = this.getAttribute('href');
+          if (targetId === '#') return;
+          
+          const targetElement = document.querySelector(targetId);
+          if (targetElement) {
+            window.scrollTo({
+              top: targetElement.offsetTop - 80,
+              behavior: 'smooth'
+            });
+          }
+        });
+      });
+    });
+  </script>
+</body>
+</html>

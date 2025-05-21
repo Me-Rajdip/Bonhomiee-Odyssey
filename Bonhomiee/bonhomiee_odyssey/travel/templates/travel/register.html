@@ -1,0 +1,434 @@
+{% extends 'travel/navbar.html' %}
+{% load static %}
+
+{% block content %}
+<div class="register-wrapper">
+    <div class="register-container">
+        <div class="register-card">
+            <div class="register-header">
+                <img src="{% static 'Img/LOGO.png' %}" alt="Bonhomiee Odyssey" class="register-logo">
+                <h2>Create Your Account</h2>
+                <p>Join Bonhomiee Odyssey to start your travel journey</p>
+            </div>
+            
+            {% if messages %}
+            <div class="alert alert-danger">
+                <ul class="error-list">
+                    {% for message in messages %}
+                    <li>{{ message }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+            {% endif %}
+            
+            <form method="post" class="register-form" novalidate>
+                {% csrf_token %}
+                
+                <div class="form-group">
+                    <label for="id_email">Email Address</label>
+                    <div class="input-with-icon">
+                        <i class="fas fa-envelope"></i>
+                        <input type="email" name="email" id="id_email" 
+                               class="form-control {% if form.email.errors %}is-invalid{% endif %}"
+                               value="{{ form.email.value|default_if_none:'' }}" required>
+                    </div>
+                    {% if form.email.errors %}
+                    <div class="invalid-feedback">
+                        {{ form.email.errors.0 }}
+                    </div>
+                    {% endif %}
+                </div>
+                
+                <div class="form-group">
+                    <label for="id_first_name">First Name</label>
+                    <div class="input-with-icon">
+                        <i class="fas fa-user"></i>
+                        <input type="text" name="first_name" id="id_first_name" 
+                               class="form-control {% if form.first_name.errors %}is-invalid{% endif %}"
+                               value="{{ form.first_name.value|default_if_none:'' }}" required>
+                    </div>
+                    {% if form.first_name.errors %}
+                    <div class="invalid-feedback">
+                        {{ form.first_name.errors.0 }}
+                    </div>
+                    {% endif %}
+                </div>
+                
+                <div class="form-group">
+                    <label for="id_last_name">Last Name</label>
+                    <div class="input-with-icon">
+                        <i class="fas fa-user"></i>
+                        <input type="text" name="last_name" id="id_last_name" 
+                               class="form-control {% if form.last_name.errors %}is-invalid{% endif %}"
+                               value="{{ form.last_name.value|default_if_none:'' }}" required>
+                    </div>
+                    {% if form.last_name.errors %}
+                    <div class="invalid-feedback">
+                        {{ form.last_name.errors.0 }}
+                    </div>
+                    {% endif %}
+                </div>
+                
+                <div class="form-group">
+                    <label for="id_password1">Password</label>
+                    <div class="input-with-icon password-field">
+                        <i class="fas fa-lock"></i>
+                        <input type="password" name="password1" id="id_password1" 
+                               class="form-control {% if form.password1.errors %}is-invalid{% endif %}" required>
+                        <i class="fas fa-eye toggle-password" data-target="id_password1"></i>
+                    </div>
+                    {% if form.password1.errors %}
+                    <div class="invalid-feedback">
+                        {{ form.password1.errors.0 }}
+                    </div>
+                    {% endif %}
+                    <small class="form-text text-muted">
+                        Your password must contain at least 8 characters, including letters and numbers.
+                    </small>
+                </div>
+                
+                <div class="form-group">
+                    <label for="id_password2">Confirm Password</label>
+                    <div class="input-with-icon password-field">
+                        <i class="fas fa-lock"></i>
+                        <input type="password" name="password2" id="id_password2" 
+                               class="form-control {% if form.password2.errors %}is-invalid{% endif %}" required>
+                        <i class="fas fa-eye toggle-password" data-target="id_password2"></i>
+                    </div>
+                    {% if form.password2.errors %}
+                    <div class="invalid-feedback">
+                        {{ form.password2.errors.0 }}
+                    </div>
+                    {% endif %}
+                </div>
+                
+                <div class="form-group terms-group">
+                    <input type="checkbox" id="terms" name="terms" required>
+                    <label for="terms">I agree to the <a href="#" class="terms-link">Terms of Service</a> and <a href="#" class="terms-link">Privacy Policy</a></label>
+                </div>
+                
+                <button type="submit" class="register-button">
+                    <i class="fas fa-user-plus"></i> Register
+                </button>
+                
+                <div class="login-redirect">
+                    Already have an account? <a href="{% url 'login' %}">Sign in</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+<style>
+/* Add all your CSS styles from previous implementation */
+/* Base Styles */
+.register-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background: linear-gradient(135deg, #f5f7fa 0%, #e4e8eb 100%);
+    padding: 2rem;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.register-container {
+    width: 100%;
+    max-width: 500px;
+}
+
+.register-card {
+    background: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    border-top: 4px solid #3a7bd5;
+    transition: transform 0.3s ease;
+}
+
+.register-card:hover {
+    transform: translateY(-5px);
+}
+
+.register-header {
+    padding: 2.5rem 2rem 1.5rem;
+    text-align: center;
+    background: linear-gradient(to right, #00d2ff, #3a7bd5);
+    color: white;
+}
+
+.register-logo {
+    width: 80px;
+    height: auto;
+    margin-bottom: 1rem;
+    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));
+}
+
+.register-header h2 {
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+}
+
+.register-header p {
+    opacity: 0.9;
+    font-size: 0.95rem;
+}
+
+.register-form {
+    padding: 2rem;
+}
+
+/* Form Elements */
+.form-group {
+    margin-bottom: 1.5rem;
+    position: relative;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+    color: #2c3e50;
+    font-size: 0.9rem;
+}
+
+.input-with-icon {
+    position: relative;
+}
+
+.input-with-icon i {
+    position: absolute;
+    left: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #95a5a6;
+    font-size: 1rem;
+}
+
+.form-control {
+    width: 100%;
+    padding: 0.75rem 1rem 0.75rem 2.5rem;
+    border: 1px solid #e0e0e0;
+    border-radius: 6px;
+    font-size: 0.95rem;
+    transition: all 0.3s ease;
+    background-color: #f8f9fa;
+}
+
+.form-control:focus {
+    border-color: #3a7bd5;
+    box-shadow: 0 0 0 3px rgba(58, 123, 213, 0.1);
+    background-color: #fff;
+    outline: none;
+}
+
+.password-field {
+    position: relative;
+}
+
+.toggle-password {
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #95a5a6;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: color 0.2s;
+}
+
+.toggle-password:hover {
+    color: #3a7bd5;
+}
+
+/* Error Handling */
+.alert-danger {
+    background-color: #fee;
+    color: #d9534f;
+    padding: 0.75rem 1rem;
+    border-radius: 6px;
+    margin-bottom: 1.5rem;
+    border-left: 3px solid #d9534f;
+}
+
+.error-list {
+    padding-left: 0;
+    list-style: none;
+    margin-bottom: 0;
+}
+
+.error-list li {
+    position: relative;
+    padding-left: 1.5rem;
+}
+
+.error-list li:before {
+    content: "•";
+    position: absolute;
+    left: 0.5rem;
+    color: #d9534f;
+}
+
+.invalid-feedback {
+    color: #d9534f;
+    font-size: 0.8rem;
+    margin-top: 0.25rem;
+    display: block;
+}
+
+.is-invalid {
+    border-color: #d9534f !important;
+}
+
+/* Terms Checkbox */
+.terms-group {
+    display: flex;
+    align-items: center;
+    margin: 1.5rem 0;
+}
+
+.terms-group input[type="checkbox"] {
+    margin-right: 0.75rem;
+    width: 1rem;
+    height: 1rem;
+}
+
+.terms-group label {
+    margin-bottom: 0;
+    font-size: 0.9rem;
+    color: #7f8c8d;
+}
+
+.terms-link {
+    color: #3a7bd5;
+    text-decoration: none;
+    transition: color 0.2s;
+}
+
+.terms-link:hover {
+    text-decoration: underline;
+}
+
+/* Button */
+.register-button {
+    width: 100%;
+    padding: 0.75rem;
+    background: linear-gradient(to right, #00d2ff, #3a7bd5);
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    margin-top: 1rem;
+}
+
+.register-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(58, 123, 213, 0.2);
+}
+
+.register-button:active {
+    transform: translateY(0);
+}
+
+/* Login Redirect */
+.login-redirect {
+    text-align: center;
+    margin-top: 1.5rem;
+    font-size: 0.9rem;
+    color: #7f8c8d;
+}
+
+.login-redirect a {
+    color: #3a7bd5;
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.2s;
+}
+
+.login-redirect a:hover {
+    text-decoration: underline;
+}
+
+/* Form Text */
+.form-text {
+    font-size: 0.8rem;
+    color: #95a5a6;
+    margin-top: 0.25rem;
+}
+
+/* Responsive Design */
+@media (max-width: 576px) {
+    .register-wrapper {
+        padding: 1rem;
+    }
+    
+    .register-card {
+        border-radius: 8px;
+    }
+    
+    .register-header, .register-form {
+        padding: 1.5rem;
+    }
+}
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Password toggle functionality
+    document.querySelectorAll('.toggle-password').forEach(icon => {
+        icon.addEventListener('click', function() {
+            const target = this.getAttribute('data-target');
+            const input = document.getElementById(target);
+            const type = input.getAttribute('type') === 'password' ? 'text' : 'password';
+            input.setAttribute('type', type);
+            this.classList.toggle('fa-eye-slash');
+        });
+    });
+
+    // Form validation
+    const form = document.querySelector('.register-form');
+    form.addEventListener('submit', function(e) {
+        let isValid = true;
+        
+        // Validate required fields
+        document.querySelectorAll('[required]').forEach(field => {
+            if (!field.value.trim()) {
+                isValid = false;
+                field.classList.add('is-invalid');
+                const errorDiv = field.closest('.form-group').querySelector('.invalid-feedback');
+                if (errorDiv) {
+                    errorDiv.textContent = 'This field is required.';
+                    errorDiv.style.display = 'block';
+                }
+            }
+        });
+
+        // Validate password match
+        const password1 = document.getElementById('id_password1');
+        const password2 = document.getElementById('id_password2');
+        if (password1 && password2 && password1.value !== password2.value) {
+            isValid = false;
+            password2.classList.add('is-invalid');
+            const errorDiv = password2.closest('.form-group').querySelector('.invalid-feedback');
+            if (errorDiv) {
+                errorDiv.textContent = 'Passwords do not match.';
+                errorDiv.style.display = 'block';
+            }
+        }
+
+        if (!isValid) {
+            e.preventDefault();
+        }
+    });
+});
+</script>
+{% endblock %}

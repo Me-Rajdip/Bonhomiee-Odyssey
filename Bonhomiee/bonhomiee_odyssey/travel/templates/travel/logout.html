@@ -1,0 +1,51 @@
+{% extends 'travel/navbar.html' %}
+{% load static %}
+
+{% block content %}
+<div class="logout-container">
+    <div class="logout-message">
+        <h2>You have been logged out</h2>
+        <p>Thank you for using our system.</p>
+        <a href="{% url 'login' %}" class="btn btn-primary">Log in again</a>
+    </div>
+</div>
+
+<style>
+.logout-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 80vh;
+    padding: 20px;
+}
+.logout-message {
+    text-align: center;
+    background: #fff;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 0 20px rgba(0,0,0,0.1);
+    width: 100%;
+    max-width: 400px;
+}
+.logout-message h2 {
+    color: #333;
+    margin-bottom: 15px;
+}
+.logout-message p {
+    margin-bottom: 25px;
+    color: #666;
+}
+.btn-primary {
+    padding: 10px 20px;
+    background-color: #007bff;
+    border: none;
+    border-radius: 4px;
+    color: white;
+    text-decoration: none;
+    display: inline-block;
+}
+.btn-primary:hover {
+    background-color: #0069d9;
+}
+</style>
+{% endblock %}

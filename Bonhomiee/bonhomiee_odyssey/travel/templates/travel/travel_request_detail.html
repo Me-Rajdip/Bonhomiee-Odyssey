@@ -1,0 +1,71 @@
+<!-- travel/templates/travel/travel_request_detail.html -->
+{% extends 'travel/navbar.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container" style="padding-top: 30px;">
+    <div class="card shadow">
+        <div class="card-header" style="background-color: #2a5ee8; color: white;">
+            <h2>Travel Request Details</h2>
+        </div>
+        <div class="card-body">
+            <div class="row mb-4">
+                <div class="col-md-6">
+                    <h5>Employee Information</h5>
+                    <p><strong>ID:</strong> {{ request.employee_number }}</p>
+                    <p><strong>Name:</strong> {{ request.name }}</p>
+                    <p><strong>Department:</strong> {{ request.department }}</p>
+                </div>
+                <div class="col-md-6">
+                    <h5>Travel Details</h5>
+                    <p><strong>Destination:</strong> {{ request.destination }}</p>
+                    <p><strong>Purpose:</strong> {{ request.travel_purpose }}</p>
+                </div>
+            </div>
+            
+            <div class="row mb-4">
+                <div class="col-md-6">
+                    <h5>Dates</h5>
+                    <p><strong>From:</strong> {{ request.start_date|date:"M d, Y" }}</p>
+                    <p><strong>To:</strong> {{ request.end_date|date:"M d, Y" }}</p>
+                    <p><strong>Duration:</strong> {{ request.duration }} days</p>
+                </div>
+                <div class="col-md-6">
+                    <h5>Preferences</h5>
+                    <p><strong>Flight Class:</strong> {{ request.get_flight_class_display }}</p>
+                    <p><strong>Hotel Preference:</strong> {{ request.get_hotel_preference_display }}</p>
+                    <p><strong>Urgent:</strong> {% if request.is_urgent %}Yes{% else %}No{% endif %}</p>
+                </div>
+            </div>
+            
+            {% if request.notes %}
+            <div class="mb-4">
+                <h5>Additional Notes</h5>
+                <p>{{ request.notes }}</p>
+            </div>
+            {% endif %}
+            
+            <div class="mb-4">
+                <h5>Status</h5>
+                <span class="badge 
+                    {% if request.status == 'approved' %}bg-success
+                    {% elif request.status == 'rejected' %}bg-danger
+                    {% else %}bg-warning text-dark{% endif %}">
+                    {{ request.get_status_display }}
+                </span>
+            </div>
+            
+            <div class="d-flex justify-content-end">
+                <a href="{% url 'travel:travel_request_list' %}" class="btn btn-secondary me-2">
+                    Back to List
+                </a>
+                {% if request.status == 'pending' %}
+                <a href="{% url 'travel:travel_request_update' request.pk %}" class="btn btn-primary me-2">
+                    Edit Request
+                </a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,626 @@
+{% extends 'travel/navbar.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container" style="padding-top: 30px; max-width: 1400px;">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px;">
+        <h2 style="margin: 0;">My Travel Requests</h2>
+        <a href="{% url 'travel:travel_request_create' %}" class="btn-primary">
+            <i class="fas fa-plus" style="margin-right: 8px;"></i> New Request
+        </a>
+    </div>
+    
+    <div class="card">
+        <div style="overflow-x: auto;">
+            <table class="travel-table">
+                <thead>
+                    <tr>
+                        <th>Ref No.</th>
+                        <th>Employee</th>
+                        <th>Department</th>
+                        <th>Destination</th>
+                        <th>Purpose</th>
+                        <th>Travel Dates</th>
+                        <th>Flight Class</th>
+                        <th>Hotel</th>
+                        <th>Status</th>
+                        <th>Urgent</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for request in requests %}
+                    <tr>
+                        <td>TR-{{ request.id|stringformat:"04d" }}</td>
+                        <td>
+                            <div class="employee-info">
+                                <div class="employee-id">{{ request.employee_number }}</div>
+                                <div class="employee-name">{{ request.name }}</div>
+                            </div>
+                        </td>
+                        <td>{{ request.department }}</td>
+                        <td>
+                            <div class="destination">
+                                <i class="fas fa-map-marker-alt"></i> {{ request.destination }}
+                            </div>
+                        </td>
+                        <td>
+                            <div class="purpose">
+                                {{ request.travel_purpose|truncatechars:30 }}
+                                {% if request.travel_purpose|length > 30 %}
+                                <button class="btn-more" onclick="showPurposeModal('{{ request.travel_purpose|escapejs }}')">
+                                    <i class="fas fa-info-circle"></i> More
+                                </button>
+                                {% endif %}
+                            </div>
+                        </td>
+                        <td>
+                            <div class="travel-dates">
+                                <div class="date-range">
+                                    <i class="far fa-calendar-alt"></i> {{ request.start_date|date:"M d" }} - {{ request.end_date|date:"M d, Y" }}
+                                </div>
+                                <div class="duration">
+                                    {{ request.duration }} day{{ request.duration|pluralize }}
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            <span class="badge flight-{{ request.flight_class }}">
+                                <i class="fas fa-plane"></i> {{ request.get_flight_class_display }}
+                            </span>
+                        </td>
+                        <td>
+                            <span class="badge hotel-{{ request.hotel_preference }}">
+                                <i class="fas fa-hotel"></i> {{ request.get_hotel_preference_display }}
+                            </span>
+                        </td>
+                        <td>
+                            <span class="badge status-{{ request.status }}">
+                                {{ request.get_status_display }}
+                                {% if request.status == 'approved' %}<i class="fas fa-check"></i>
+                                {% elif request.status == 'rejected' %}<i class="fas fa-times"></i>
+                                {% else %}<i class="fas fa-clock"></i>{% endif %}
+                            </span>
+                        </td>
+                        <td class="urgent-cell">
+                            {% if request.is_urgent %}
+                            <span class="badge urgent">
+                                <i class="fas fa-exclamation-triangle"></i> Urgent
+                            </span>
+                            {% else %}-{% endif %}
+                        </td>
+                        <td>
+                            <div class="action-buttons">
+                                <a href="{% url 'travel:travel_request_detail' request.pk %}" class="btn-view" title="View Details">
+                                    <i class="fas fa-eye"></i>
+                                </a>
+                                {% if request.status == 'pending' %}
+                                <a href="{% url 'travel:travel_request_update' request.pk %}" class="btn-edit" title="Edit">
+                                    <i class="fas fa-edit"></i>
+                                </a>
+                                <button class="btn-delete" onclick="confirmDelete('{{ request.id }}', {{ request.is_urgent|yesno:"true,false" }})" title="Delete">
+                                    <i class="fas fa-trash-alt"></i>
+                                </button>
+                                {% endif %}
+                            </div>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="11" class="empty-state">
+                            <i class="fas fa-inbox"></i>
+                            <h4>No travel requests found</h4>
+                            <p>Create your first travel request using the button above</p>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        
+        {% if is_paginated %}
+        <div class="pagination">
+            <div class="pagination-controls">
+                {% if page_obj.has_previous %}
+                <a href="?page={{ page_obj.previous_page_number }}" class="page-nav">
+                    <i class="fas fa-chevron-left"></i> Previous
+                </a>
+                {% endif %}
+                
+                {% for num in page_obj.paginator.page_range %}
+                {% if page_obj.number == num %}
+                <span class="page-number current">{{ num }}</span>
+                {% else %}
+                <a href="?page={{ num }}" class="page-number">{{ num }}</a>
+                {% endif %}
+                {% endfor %}
+                
+                {% if page_obj.has_next %}
+                <a href="?page={{ page_obj.next_page_number }}" class="page-nav">
+                    Next <i class="fas fa-chevron-right"></i>
+                </a>
+                {% endif %}
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+<!-- Purpose Modal -->
+<div id="purposeModal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3>Travel Purpose Details</h3>
+            <button onclick="closeModal('purposeModal')" class="modal-close">&times;</button>
+        </div>
+        <div class="modal-body">
+            <p id="purposeText"></p>
+        </div>
+    </div>
+</div>
+
+<!-- Delete Confirmation Modal -->
+<div id="deleteModal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3>Confirm Deletion</h3>
+            <button onclick="closeModal('deleteModal')" class="modal-close">&times;</button>
+        </div>
+        <div class="modal-body">
+            <p>Are you sure you want to delete this travel request?</p>
+            <div id="urgentWarning" class="urgent-warning">
+                <i class="fas fa-exclamation-triangle"></i> This is marked as an urgent request!
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button onclick="closeModal('deleteModal')" class="btn-cancel">Cancel</button>
+            <form id="deleteForm" method="post" style="display: inline;">
+                {% csrf_token %}
+                <button type="submit" class="btn-delete-confirm">Delete</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Include Font Awesome -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+<style>
+/* Base Styles */
+.container {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: #333;
+}
+
+.btn-primary {
+    padding: 10px 20px;
+    background: #2a5ee8;
+    color: white;
+    border-radius: 5px;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    transition: all 0.2s ease;
+}
+
+.btn-primary:hover {
+    background: #1e4ac4;
+    transform: translateY(-2px);
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.card {
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 2px 15px rgba(0,0,0,0.1);
+    overflow: hidden;
+}
+
+/* Table Styles */
+.travel-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.travel-table th {
+    background: #2a5ee8;
+    color: white;
+    padding: 15px;
+    text-align: left;
+    font-weight: 500;
+    position: sticky;
+    top: 0;
+}
+
+.travel-table td {
+    padding: 15px;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.travel-table tr:hover {
+    background-color: rgba(42, 94, 232, 0.03);
+}
+
+/* Cell Styles */
+.employee-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.employee-id {
+    font-size: 0.85em;
+    color: #666;
+}
+
+.employee-name {
+    font-weight: 500;
+}
+
+.destination i {
+    color: #2a5ee8;
+    margin-right: 5px;
+}
+
+.purpose {
+    max-width: 200px;
+}
+
+.btn-more {
+    background: none;
+    border: none;
+    color: #2a5ee8;
+    cursor: pointer;
+    padding: 0;
+    margin-top: 5px;
+    font-size: 0.9em;
+    display: inline-flex;
+    align-items: center;
+}
+
+.btn-more:hover {
+    text-decoration: underline;
+}
+
+.travel-dates {
+    display: flex;
+    flex-direction: column;
+}
+
+.date-range i {
+    color: #666;
+    margin-right: 5px;
+}
+
+.duration {
+    font-size: 0.85em;
+    color: #666;
+}
+
+/* Badge Styles */
+.badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 5px 10px;
+    border-radius: 20px;
+    font-size: 0.85em;
+    white-space: nowrap;
+}
+
+.badge i {
+    margin-right: 5px;
+}
+
+.flight-economy {
+    background: #6c757d;
+    color: white;
+}
+
+.flight-business {
+    background: #2a5ee8;
+    color: white;
+}
+
+.flight-premium {
+    background: #ffc107;
+    color: #333;
+}
+
+.hotel-3star {
+    background: #17a2b8;
+    color: white;
+}
+
+.hotel-4star {
+    background: #28a745;
+    color: white;
+}
+
+.hotel-5star {
+    background: #dc3545;
+    color: white;
+}
+
+.status-pending {
+    background: #ffc107;
+    color: #333;
+}
+
+.status-approved {
+    background: #28a745;
+    color: white;
+}
+
+.status-rejected {
+    background: #dc3545;
+    color: white;
+}
+
+.urgent {
+    background: #dc3545;
+    color: white;
+}
+
+/* Action Buttons */
+.action-buttons {
+    display: flex;
+    gap: 8px;
+}
+
+.btn-view, .btn-edit, .btn-delete {
+    padding: 8px 12px;
+    border-radius: 5px;
+    color: white;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+}
+
+.btn-view {
+    background: #17a2b8;
+}
+
+.btn-edit {
+    background: #2a5ee8;
+}
+
+.btn-delete {
+    background: #dc3545;
+    border: none;
+    cursor: pointer;
+}
+
+.btn-view:hover, .btn-edit:hover, .btn-delete:hover {
+    opacity: 0.9;
+    transform: translateY(-2px);
+}
+
+/* Empty State */
+.empty-state {
+    padding: 40px;
+    text-align: center;
+}
+
+.empty-state i {
+    font-size: 3em;
+    color: #6c757d;
+    margin-bottom: 15px;
+}
+
+.empty-state h4 {
+    margin-bottom: 10px;
+    color: #333;
+}
+
+.empty-state p {
+    color: #6c757d;
+}
+
+/* Pagination */
+.pagination {
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+    border-top: 1px solid #eee;
+}
+
+.pagination-controls {
+    display: flex;
+    gap: 5px;
+    align-items: center;
+}
+
+.page-nav, .page-number {
+    padding: 8px 15px;
+    border-radius: 5px;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.page-nav {
+    background: #2a5ee8;
+    color: white;
+}
+
+.page-number {
+    background: #f8f9fa;
+    color: #2a5ee8;
+}
+
+.page-number.current {
+    background: #2a5ee8;
+    color: white;
+}
+
+/* Modal Styles */
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.5);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 1050;
+}
+
+.modal-content {
+    background: white;
+    border-radius: 10px;
+    width: 500px;
+    max-width: 90%;
+    max-height: 90vh;
+    overflow-y: auto;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+}
+
+.modal-header {
+    padding: 20px;
+    border-bottom: 1px solid #eee;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.modal-header h3 {
+    margin: 0;
+}
+
+.modal-close {
+    background: none;
+    border: none;
+    font-size: 1.5em;
+    cursor: pointer;
+    color: #666;
+}
+
+.modal-body {
+    padding: 20px;
+}
+
+.modal-footer {
+    padding: 15px 20px;
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    border-top: 1px solid #eee;
+}
+
+.btn-cancel {
+    padding: 8px 15px;
+    background: #6c757d;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.btn-delete-confirm {
+    padding: 8px 15px;
+    background: #dc3545;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.urgent-warning {
+    padding: 10px;
+    background: #fff3cd;
+    border-radius: 5px;
+    margin: 15px 0;
+    display: none;
+    align-items: center;
+    gap: 8px;
+}
+
+.urgent-warning i {
+    color: #ffc107;
+}
+
+/* Responsive Design */
+@media (max-width: 1200px) {
+    .travel-table {
+        display: block;
+        overflow-x: auto;
+    }
+}
+
+@media (max-width: 768px) {
+    .container {
+        padding: 15px;
+    }
+    
+    .travel-table th, .travel-table td {
+        padding: 10px;
+    }
+    
+    .action-buttons {
+        flex-direction: column;
+        gap: 5px;
+    }
+    
+    .btn-view, .btn-edit, .btn-delete {
+        padding: 5px 8px;
+    }
+}
+</style>
+
+<script>
+// Show purpose modal
+function showPurposeModal(purpose) {
+    const modal = document.getElementById('purposeModal');
+    document.getElementById('purposeText').textContent = purpose;
+    modal.style.display = 'flex';
+}
+
+// Delete confirmation function
+function confirmDelete(requestId, isUrgent) {
+    const modal = document.getElementById('deleteModal');
+    const form = document.getElementById('deleteForm');
+    const warning = document.getElementById('urgentWarning');
+    
+    // Set form action
+    form.action = `/travel/requests/${requestId}/delete/`;
+    
+    // Show/hide urgent warning
+    if (isUrgent) {
+        warning.style.display = 'flex';
+    } else {
+        warning.style.display = 'none';
+    }
+    
+    // Show modal
+    modal.style.display = 'flex';
+}
+
+// Close modal
+function closeModal(modalId) {
+    document.getElementById(modalId).style.display = 'none';
+}
+
+// Close modal when clicking outside
+document.querySelectorAll('.modal').forEach(modal => {
+    modal.addEventListener('click', function(e) {
+        if (e.target === this) {
+            this.style.display = 'none';
+        }
+    });
+});
+
+// Add hover effects to table rows
+document.querySelectorAll('.travel-table tbody tr').forEach(row => {
+    row.addEventListener('mouseenter', function() {
+        this.style.transform = 'translateX(5px)';
+    });
+    row.addEventListener('mouseleave', function() {
+        this.style.transform = 'translateX(0)';
+    });
+});
+</script>
+{% endblock %}
