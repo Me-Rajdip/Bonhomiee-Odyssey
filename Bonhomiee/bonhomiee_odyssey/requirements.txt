@@ -1,0 +1,45 @@
+# Core Requirements
+Django==5.2.1
+python-dotenv==1.0.0
+
+# Database
+psycopg2-binary==2.9.9  # For PostgreSQL
+# mysqlclient==2.2.0    # For MySQL (uncomment if needed)
+
+# Frontend/CSS
+django-bootstrap5==23.3
+django-crispy-forms==2.1
+crispy-bootstrap5==2023.10
+
+# Date/Time Handling
+python-dateutil==2.8.2
+pytz==2023.3
+
+
+# Security
+django-axes==6.0.2      # For login security
+django-cors-headers==4.3.1
+
+# Development Tools
+django-debug-toolbar==4.2.0
+django-extensions==3.2.3
+ipython==8.17.2
+
+# Production
+gunicorn==21.2.0
+whitenoise==6.6.0
+django-storages==1.14.0
+boto3==1.28.65          # For AWS S3 storage
+
+# PDF Generation (optional)
+reportlab==4.0.4
+django-easy-pdf==0.1.1
+
+# Testing
+pytest==7.4.2
+pytest-django==4.7.0
+factory-boy==3.3.0
+Faker==19.6.2
+
+# Date Picker (for your form)
+django-flatpickr==2.0.0
